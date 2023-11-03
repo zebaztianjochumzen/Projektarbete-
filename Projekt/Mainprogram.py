@@ -7,9 +7,19 @@ class Goods:
         self.amount = amount
 
     def __str__(self):
-        pass
+        return "Product: " + str(self.name) + "\n" "Code: " + str(self.code) + "\n" "Price: " + str(self.price) + "\n" "Amount: " + str(self.amount)
 
 class Database:
+    """
+    Tror att jag behöver fixa någon typ av dictionary utöver txt filen som lagrar PLU koden till ett visst namn, så att när kassören skriver in vilken koden så är det automatiskt översatt till en vara.
+    """
+    def transformation():
+        """
+        Tanken med denna funktionen är att vi ska kunna ta attributerna från Goods och lagra attributen code som key 
+        och då att key:n ska kunna tillkalla rätt vara. 
+        Vet dock ej hur jag ska lösa detta än.
+        """
+
     def __init__(self):
         self.goods = []
     
@@ -17,7 +27,7 @@ class Database:
         file = open("goods.txt", "r", encoding="utf-8")
         code = file.readline().strip()
         while code:
-            name = int(file.readline().strip())
+            name = (file.readline().strip())
             price = int(file.readline().strip())
             amount = int(file.readline().strip())
             new_goods = Goods(code,name,price,amount)
@@ -26,26 +36,45 @@ class Database:
         file.close()
 
     def save_goods(self):
-        file = open("goods.txt", "a", encoding="utf-8")
-        self.goods.sort()
+        file = open("goods.txt", "w", encoding="utf-8")
         for goods in self.goods:
-            file.write(str(goods.code + "\n"))
+            file.write(str(goods.code) + "\n")
             file.write(str(goods.name) + "\n")
             file.write(str(goods.price) + "\n")
             file.write(str(goods.amount)+ "\n")
         file.close()
 
     def show_goods(self):
-        for goods in self.goods:
-            print (goods)
+        for products in self.goods:
+            print(products)
     
     def new_goods(self):
         code = int(input("PLU CODE: "))
-        name = int(input("NAME: "))
+        name = str(input("NAME: "))
         price = int(input("PRICE: "))
         amount = int(input("AMOUNT "))
         new = Goods(code, name, price, amount)
         self.goods.append(new)
+
+class Cashier_mode():
+    """Planen med den är funktionen är att vi ska vara i cashier mode, vilket innebär att vi ska kunna 
+        uppfylla de kraven på ett användarvänligt program, där "kassören" ska kunna skriva in PLU koden 
+        från databasen och sedan skriva in antalet. För att sedan kunna avsluta med #.
+        """
+    def cashier_mode():
+        print("You have now entered the cashier mode:")
+        print("Just write out the product codes you want to add and the quantity")
+        print("To exit and get a receipt finish with (#)")
+
+
+    def sum_products():
+        """Planen med denna funktionen är att den ska beräkna det totala priset beroende på antalet produkter som kassören skriver in. Hur vet jag inte än...
+
+        """
+    def write_out_receipt():
+        """
+        Har absolut ingen aning om hur jag ska framställa kvittot än lol.
+        """
 
 
 def menu():
@@ -66,12 +95,12 @@ def main():
     while menu != "Q":
         if option == "A":
             database.new_goods()
-        elif option == "C":
-            pass
+            database.save_goods()
         elif option == "S":
+            print("\n")
+            print("\n" "The products in the database is:")
             database.show_goods()
         option =menu()
-    database.save_goods()
     print("Bye!")
 
 if __name__ == "__main__":
