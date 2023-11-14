@@ -1,4 +1,3 @@
-import Errorsearch
 class Goods: 
     def __init__(self, code, name , price, amount):
 
