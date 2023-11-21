@@ -71,8 +71,12 @@ class Database:
         print("You have now entered the cashier mode:")
         print("Just write out the product codes you want to add and the quantity")
         print("To exit and get a receipt finish with (#)")
-        self.cart = []
-        self.price = []
+        self.cart = [
+
+        ]
+        self.price = [
+
+        ]
         total = 0
         
         while True:
@@ -98,7 +102,8 @@ class Database:
 
             """
             if user_input[0] in self.products_price:
-                self.price.append((self.products_price[user_input[0]] * int(user_input[1])))
+                x = ((self.products_price[user_input[0]] * int(user_input[1])))
+                self.cart.append(x)
             else:
                 print("The product that you wrote does not have an assigned price\nPlease try again")
 
@@ -109,10 +114,33 @@ class Database:
         
         for i in self.price:
             total += int(i)
+        file = open("Kvitto.txt", "w", encoding="utf-8")
+        kvitto = ("Products" +"      " + "Amount" + "     " + "Price")
+        line = ("------------------------------")
+        #bla = ((self.cart + "  " + self.price))
+        file.write(kvitto +"\n" + line ) 
+        #file.write(bla)
+        for index, i in enumerate(self.cart):
+            if(index % 3 == 0):
+                file.write("\n")
+            file.writelines(str(i)+ "         ")
             
-        print("The item in your cart is:",self.cart)
-        print(self.price)
-        print("Total", total)
+        # for i in self.cart:
+        #     file.write("\n")
+        #file.writelines(str(total))
+        # for i in self.price:
+            
+        file.close()
+
+
+
+        #print("Receipt")
+
+        #print("Prododucts" + " "  "Amount" + " " + "Price"+"\n",self.cart,self.price)
+        #print("Total", total)
+
+        
+
 
         
         
