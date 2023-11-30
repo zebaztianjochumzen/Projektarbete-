@@ -1,4 +1,5 @@
-class Goods: 
+class Good: 
+    """This class defines what a good actually is, and which attribute each good has"""
     def __init__(self, code, name , price, amount):
 
         self.code = code
@@ -10,29 +11,24 @@ class Goods:
         return "Product: " + str(self.name) + "\n" "Code: " + str(self.code) + "\n" "Price: " + str(self.price) + "\n" "Amount: " + str(self.amount)
 
 class Database:
-    """ Tror att jag behöver fixa någon typ av dictionary utöver txt filen som lagrar PLU koden till ett visst namn, så att när kassören skriver in vilken koden så är det automatiskt översatt till en vara.
-    """
-    def transformation():
-        """
-        Tanken med denna funktionen är att vi ska kunna ta attributerna från Goods och lagra attributen code som key 
-        och då att key:n ska kunna tillkalla rätt vara. 
-        Vet dock ej hur jag ska lösa detta än.
-        """
+    """This class defines the database, it stores all the goods and contains the function cashier mode"""
 
     def __init__(self):
+        """This creates the different lists and dictionaries to enable the cashier function to have its funtionality"""
         self.goods = []
         self.products = {} #Detta är en dictionary som lagrar key: Code och value: Name 
         self.products_price = {}
         self.products_amount = {}
     
     def read_goods(self):
+        """ This function reads from the goods list, it reads from the file goods.txt"""
         file = open("goods.txt", "r", encoding="utf-8")
         code = file.readline().strip()
         while code:
             name = (file.readline().strip())
             price = int(file.readline().strip())
             amount = int(file.readline().strip())
-            new_goods = Goods(code,name,price,amount)
+            new_goods = Good(code,name,price,amount)
             self.goods.append(new_goods)
             self.products.update({code : name}) # Denna biten är ny och lägger till attributen code och name. Code = key och Name = Value
             self.products_price.update({code : price})
@@ -61,23 +57,22 @@ class Database:
         name = str(input("NAME: "))
         price = int(input("PRICE: "))
         amount = int(input("AMOUNT "))
-        new = Goods(code, name, price, amount)
+        new = Good(code, name, price, amount)
         self.goods.append(new)
-        self.products.update({code : name,})
+        self.products.update({code : name})
         self.products_price.update({code : price})
         self.products_amount.update({code : amount}) # Denna biten är ny och lägger till attributen code och name. Code = key och Name = Value
     
     def cashier_mode(self):
+        """ This function is the main part of the program, its the user friendly part where you cant actually write in the products you want to add.
+            It also contains error handeling, so you can not write in odd inputs.
+        """
         print("You have now entered the cashier mode:")
         print("Just write out the product codes you want to add and the quantity")
         print("To exit and get a receipt finish with (#)")
-        self.cart = [
-
-        ]
-        self.price = [
-
-        ]
-        total = 0
+        self.cart = []
+        self.price = []
+        self.number_products = {}
         
         while True:
             user_input = (input().split(" "))
@@ -85,100 +80,43 @@ class Database:
                     break
             if all(element.isdigit() for element in user_input):
                 if user_input[0] in self.products:
-                    self.cart.append(self.products[user_input[0]])
-                    if len(user_input) is 1:
-                        self.cart.append(1)
+                    if int(user_input[1]) > self.products_amount[user_input[0]]:
+                        print("The amount you typed in does not exist")    
                     else:
+                        self.cart.append(self.products[user_input[0]])
                         self.cart.append(user_input[1])
+                        self.cart.append(self.products_price[user_input[0]])
+                        if user_input[0] in self.products_price:
+                            price = ((self.products_price[user_input[0]] * int(user_input[1])))
+                            self.cart.append(price)
+                            self.price.append(price)
+                        if len(user_input) is 1:
+                            self.cart.append(1)
                 else:
                     print("That item does not exist")
                     continue
             else:
                 print("Invalid Input")
-            """
-            If statementet nedan kollar om user_input är kopplat till ett pris, alltså att varan man skriver in är ett pris
-            Det som händer då är att den multiplicerar den andra delen av user_input och sen lägger till det i en lista. 
-            Detta gör alltså att man kan se totalpriset baserat för varje vara baserat på hur många varor man köper.
-
-            """
-            if user_input[0] in self.products_price:
-                x = ((self.products_price[user_input[0]] * int(user_input[1])))
-                self.cart.append(x)
-            else:
-                print("The product that you wrote does not have an assigned price\nPlease try again")
-
-        """
-        Det denna den for loopen under gör att den tar listan self.price och sen så tar den och summerar alla positionerna med ett
-        specefikt värde med varandra så att man får en total summa. 
-        """
         
+    def write_out_recipiet(self):
+        """
+        This function writes out the recipiet to the file named receipt.txt
+        """
+        total = 0
         for i in self.price:
             total += int(i)
-        file = open("Kvitto.txt", "w", encoding="utf-8")
-        kvitto = ("Products" +"      " + "Amount" + "     " + "Price")
-        line = ("------------------------------")
-        #bla = ((self.cart + "  " + self.price))
-        file.write(kvitto +"\n" + line ) 
-        #file.write(bla)
+        file = open("receipt.txt", "w", encoding="utf-8")
+        recipt = ("Products" +"      " + "Amount" +"     "+"A-Price"+"    "+"Price")
+        line = ("--------------------------------------------")
+        file.write(recipt +"\n" + line ) 
+        
         for index, i in enumerate(self.cart):
-            if(index % 3 == 0):
+            if(index % 4 == 0):
                 file.write("\n")
             file.writelines(str(i)+ "         ")
-            
-        # for i in self.cart:
-        #     file.write("\n")
-        #file.writelines(str(total))
-        # for i in self.price:
-            
+        file.write
+        file.write("\n"+ "Total" + "                                " + str(total))
         file.close()
-
-
-
-        #print("Receipt")
-
-        #print("Prododucts" + " "  "Amount" + " " + "Price"+"\n",self.cart,self.price)
-        #print("Total", total)
-
-        
-
-
-        
-        
-        """while True:
-            input1 = input().split(" ")
-            cart.append(input1)
-            print(cart)
-            if input1 == "#":
-                  break 
-            else: 
-                print(cart)
-                continue"""
-
-    """
-    def cashier_mode(self):
-        print("You have now entered the cashier mode:")
-        print("Just write out the product codes you want to add and the quantity")
-        print("To exit and get a receipt finish with (#)")
-        total = []
-        while True:
-            input1 = input().split(" ")
-            total.append(input1)
-            
-            if input1 = self.pr
-                continue
-            elif input1 == ["#"]:
-                  break 
-            else: 
-                print(total)
-                continue
-              
-    def sum_products():
-        Planen med denna funktionen är att den ska beräkna det totala priset beroende på antalet produkter som kassören skriver in. Hur vet jag inte än...
-        
-    def write_out_receipt():
-      
-        Har absolut ingen aning om hur jag ska framställa kvittot än lol.
-    """
 
 def menu():
     print("-------------------------------")
@@ -209,6 +147,7 @@ def main():
         if option == "C":
             database.read_goods()
             cashier.cashier_mode()
+            cashier.write_out_recipiet()
             break
         elif option == "Q":
             print("Bye!")
