@@ -1,0 +1,5 @@
+Products      Amount     A-Price    Price
+--------------------------------------------
+Tomatoes         3         5         15         
+Cucumber         8         23         184         
+Total                                199

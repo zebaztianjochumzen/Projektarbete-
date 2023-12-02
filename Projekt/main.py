@@ -94,9 +94,7 @@ class Database:
 
 def menu():
     print("-------------------------------")
-    print("A Add goods")
     print("C Cashier mode")
-    print("S Show all Goods")
     print("Q Quit")
     option = input("What do you want to do? ").upper()
     return option 
