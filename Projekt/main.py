@@ -1,4 +1,6 @@
 #Zebaztian Jochumzen | 145 Varuprisdatabas
+import pandas
+import csv
 class Good: 
     """This class defines what a good actually is, and which attribute each good has"""
     def __init__(self, code, name , price, amount):
@@ -49,6 +51,7 @@ class Database:
         self.cart2= []
         self.price = []
         self.number_products = {}
+        self.total = []
         
         while True:
             user_input = (input().split(" "))
@@ -56,29 +59,24 @@ class Database:
                     break
             if all(element.isdigit() for element in user_input):
                 if user_input[0] in self.products:
+                    if len(user_input) <=1:
+                        print("Enter a valid amount")
+                        continue
                     if int(user_input[1]) > self.products_amount[user_input[0]]:
-                        print("The amount you typed in does not exist")    
-                    else:
-                        self.cart.append(self.products[user_input[0]])
-                        self.cart.append(user_input[1])
-                        self.cart.append(self.products_price[user_input[0]])
-                        if user_input[0] in self.products_price:
-                            price = ((self.products_price[user_input[0]] * int(user_input[1])))
-                            self.cart.append(price)
-                            self.price.append(price)
-                        if len(user_input) is 1:
-                            self.cart.append(1)
+                            print("The amount you typed in does not exist")    
+                    
+                    elif user_input[0] in self.products_price:
+                        price = ((self.products_price[user_input[0]] * int(user_input[1])))
+                        self.price.append(price)
+                        self.cart.append([self.products[user_input[0]],user_input[1],self.products_price[user_input[0]],price])
+                        
+                        
                 else:
                     print("That item does not exist")
                     continue
             else:
                 print("Invalid Input")
-            
-        for element in self.cart: 
-                self.cart2.append(element)
-
         print(self.cart)
-        print(self.cart2)
 
 
     def write_out_recipiet(self):
@@ -88,6 +86,7 @@ class Database:
         total = 0
         for i in self.price:
             total += int(i)
+            self.total.append(total)
         file = open("receipt.txt", "w", encoding="utf-8")
         recipt = ("Products" +"      " + "Amount" +"     "+"A-Price"+"    "+"Price")
         line = ("--------------------------------------------")
@@ -100,6 +99,15 @@ class Database:
         file.write
         file.write("\n"+ "Total" + "                                " + str(total))
         file.close()
+        
+        """
+        This function writes out the recipiet to the file named receipt.txt
+            """
+        with open("receipt.csv", "w", newline="",encoding="utf-8") as file:
+            fields = ("Products","Amount","A-Price","Price")
+            writer = csv.writer(file)
+            writer.writerow(fields)
+            writer.writerows(self.cart)
 
 def menu():
     print("-------------------------------")
