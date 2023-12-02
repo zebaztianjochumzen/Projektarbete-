@@ -45,6 +45,7 @@ class Database:
         print("Just write out the product codes you want to add and the quantity")
         print("To exit and get a receipt finish with (#)")
         self.cart = []
+        self.cart2= []
         self.price = []
         self.number_products = {}
         
@@ -71,7 +72,14 @@ class Database:
                     continue
             else:
                 print("Invalid Input")
-        
+            
+        for element in self.cart: 
+                self.cart2.append(element)
+
+        print(self.cart)
+        print(self.cart2)
+
+
     def write_out_recipiet(self):
         """
         This function writes out the recipiet to the file named receipt.txt
