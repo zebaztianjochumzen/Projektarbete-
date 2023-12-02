@@ -1,3 +1,4 @@
+#Zebaztian Jochumzen | 145 Varuprisdatabas
 class Good: 
     """This class defines what a good actually is, and which attribute each good has"""
     def __init__(self, code, name , price, amount):
