@@ -1,5 +1,5 @@
 Products      Amount     A-Price    Price
 --------------------------------------------
-Tomatoes         3         5         15         
-Cucumber         8         23         184         
-Total                                199
+['Tomatoes', '3', 5, 15]         ['Cucumber', '8', 23, 184]         ['Bananas', '10', 6, 60]         ['Potatoes', '10', 3, 30]         
+['Oranges', '3', 4, 12]         ['Coca Cola', '7', 19, 133]         
+Total                                434

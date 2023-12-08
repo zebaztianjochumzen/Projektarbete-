@@ -48,10 +48,7 @@ class Database:
         print("Just write out the product codes you want to add and the quantity")
         print("To exit and get a receipt finish with (#)")
         self.cart = []
-        self.cart2= []
-        self.price = []
-        self.number_products = {}
-        self.total = []
+        #self.price = []
         
         while True:
             user_input = (input().split(" "))
@@ -67,7 +64,7 @@ class Database:
                     
                     elif user_input[0] in self.products_price:
                         price = ((self.products_price[user_input[0]] * int(user_input[1])))
-                        self.price.append(price)
+                        #self.price.append(price)
                         self.cart.append([self.products[user_input[0]],user_input[1],self.products_price[user_input[0]],price])
                         
                         
@@ -83,39 +80,23 @@ class Database:
         """
         This function writes out the recipiet to the file named receipt.txt
         """
-        total = 0
-        for i in self.price:
-            total += int(i)
-            self.total.append(total)
-        file = open("receipt.txt", "w", encoding="utf-8")
-        recipt = ("Products" +"      " + "Amount" +"     "+"A-Price"+"    "+"Price")
-        line = ("--------------------------------------------")
-        file.write(recipt +"\n" + line ) 
-        
-        for index, i in enumerate(self.cart):
-            if(index % 4 == 0):
-                file.write("\n")
-            file.writelines(str(i)+ "         ")
-        file.write
-        file.write("\n"+ "Total" + "                                " + str(total))
-        file.close()
-        
-        """
-        This function writes out the recipiet to the file named receipt.txt
-            """
         with open("receipt.csv", "w", newline="",encoding="utf-8") as file:
             fields = ("Products","Amount","A-Price","Price")
             writer = csv.writer(file)
             writer.writerow(fields)
             writer.writerows(self.cart)
             
-            df = pd.read_csv("receipt.csv")
-            price_sum = df["Price"].sum()
-            print("Total Price:", price_sum)
+        df = pd.read_csv("receipt.csv")
+        price_sum = df["Price"].sum()
+        
+        with open("receipt.csv", "a", newline="",encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["Total: "+ "      "+ "    " + "    " + str(price_sum)])
+            
+        
             
 #Använd remove, för att fixa så att vi kan ta bort spefecika produkter från den totala listan. 
 #Använd en funktion som kollar och ändrar en listposition så att man kan ändra antalet i listan. 
-#Lägg till och använd pandas så att vi summerar den sista kolumnen och lägger en print sats i slutet av csv filen. 
             
 def menu():
     print("-------------------------------")
@@ -131,16 +112,8 @@ def main():
     database.read_goods()
     cashier = database
     option = menu()
+    
     while True != "Q":
-        if option == "A":
-            database.new_goods()
-            database.save_goods()
-            break
-        elif option == "S":
-            print("\n")
-            print("\n" "The products in the database is:")
-            database.show_goods()
-            break
         if option == "C":
             database.read_goods()
             cashier.cashier_mode()
