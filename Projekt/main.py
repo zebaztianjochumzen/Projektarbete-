@@ -109,8 +109,9 @@ class Database:
             writer.writerow(fields)
             writer.writerows(self.cart)
             
-            df = pd.DataFrame()
-            print(df.sum()) 
+            df = pd.read_csv("receipt.csv")
+            price_sum = df["Price"].sum()
+            print("Total Price:", price_sum)
             
 #Använd remove, för att fixa så att vi kan ta bort spefecika produkter från den totala listan. 
 #Använd en funktion som kollar och ändrar en listposition så att man kan ändra antalet i listan. 
