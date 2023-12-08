@@ -1,5 +1,5 @@
 #Zebaztian Jochumzen | 145 Varuprisdatabas
-import pandas
+import pandas as pd
 import csv
 class Good: 
     """This class defines what a good actually is, and which attribute each good has"""
@@ -108,7 +108,14 @@ class Database:
             writer = csv.writer(file)
             writer.writerow(fields)
             writer.writerows(self.cart)
-
+            
+            df = pd.DataFrame()
+            print(df.sum()) 
+            
+#Använd remove, för att fixa så att vi kan ta bort spefecika produkter från den totala listan. 
+#Använd en funktion som kollar och ändrar en listposition så att man kan ändra antalet i listan. 
+#Lägg till och använd pandas så att vi summerar den sista kolumnen och lägger en print sats i slutet av csv filen. 
+            
 def menu():
     print("-------------------------------")
     print("C Cashier mode")
