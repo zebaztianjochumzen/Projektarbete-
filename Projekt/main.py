@@ -64,7 +64,6 @@ class Database:
                     
                     elif user_input[0] in self.products_price:
                         price = ((self.products_price[user_input[0]] * int(user_input[1])))
-                        #self.price.append(price)
                         self.cart.append([self.products[user_input[0]],user_input[1],self.products_price[user_input[0]],price])
                         
                         
@@ -74,6 +73,56 @@ class Database:
             else:
                 print("Invalid Input")
         print(self.cart)
+    
+    def edit_recipiet(self):
+        """This function enables the user to change"""
+        end_question = input("Do you want to edit the cart? ").lower() 
+        if end_question == "yes":
+            edit_line = int(input("Which line do you want to edit? "))
+            if 0 <= edit_line < len(self.cart):
+                
+                if edit_line < len(self.cart):
+                    edit_question = input("What do you want to edit? ").lower()
+        
+                    if edit_question == "amount":
+                        new_amount = input("Enter the new amount: ")
+                        
+                        self.cart[edit_line][1] = new_amount
+                        
+                        if new_amount == 0:
+                            self.cart.remove(self.cart[edit_line])
+                            print("Line removed.")
+                        else:
+                            print("Edit sucessfull")
+                            
+                    else: 
+                        print(f"Editing {edit_question} is not supported.")
+                else:
+                    print(f"Invalid index: {edit_line}")
+            else:
+                print(f"Invalid index: {edit_line}")
+                    
+                    
+        """
+             
+                
+            if int(edit_line) in self.cart[edit_line]:
+                
+                    if edit_question == "amount":
+                        self.cart[edit_line][1]
+                        break
+                
+            elif end_question == "no":
+                break
+            
+            else: 
+                continue
+        for i in self.cart[i]: 
+            if self.cart[edit_line][1] == 0:
+                del self.cart[edit_line]
+                print(f"Row number {edit_line} has now been taken of the recipiet")
+                
+        """
 
 
     def write_out_recipiet(self):
@@ -117,6 +166,7 @@ def main():
         if option == "C":
             database.read_goods()
             cashier.cashier_mode()
+            cashier.edit_recipiet()
             cashier.write_out_recipiet()
             break
         elif option == "Q":
