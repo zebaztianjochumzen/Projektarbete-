@@ -1,6 +1,7 @@
 #Zebaztian Jochumzen | 145 Varuprisdatabas
 import pandas as pd
 import csv
+import errorhandeling as er
 class Good: 
     """This class defines what a good actually is, and which attribute each good has"""
     def __init__(self, code, name , price, amount):
@@ -74,56 +75,42 @@ class Database:
                 print("Invalid Input")
         print(self.cart)
     
-    def edit_recipiet(self):
-        """This function enables the user to change"""
-        end_question = input("Do you want to edit the cart? ").lower() 
-        if end_question == "yes":
-            edit_line = int(input("Which line do you want to edit? "))
-            if 0 <= edit_line < len(self.cart):
-                
-                if edit_line < len(self.cart):
-                    edit_question = input("What do you want to edit? ").lower()
-        
-                    if edit_question == "amount":
-                        new_amount = input("Enter the new amount: ")
-                        
-                        self.cart[edit_line][1] = new_amount
-                        
-                        if new_amount == 0:
-                            self.cart.remove(self.cart[edit_line])
-                            print("Line removed.")
+    def edit_receipt(self):
+        """This function enables the user to change the amount before the receipt prints out, this also enables the user to delete unasked products"""
+        while True:
+            end_question = input("Do you want to edit the cart? ").lower() 
+            if end_question == "yes":
+                edit_line = er.get_valid_input("Which line do you want to edit? ")
+                if 0 <= edit_line < len(self.cart):
+                    i, j = 0, 0
+                    while j == 0:
+                        if edit_line < len(self.cart):
+                            edit_question = input("What do you want to edit? ").lower()
+                            if edit_question == "amount":
+                                while i == 0:
+                                    new_amount = er.get_valid_input("Enter the new amount: ")
+                                    self.cart[edit_line][1] = new_amount
+                                    if int(new_amount) == 0:
+                                        del self.cart[edit_line]
+                                        print("Line removed.")
+                                        i += 1
+                                        j += 1
+                                        break
+                                    else:
+                                        print("Edit successful")
+                                        i += 1
+                                        j += 1
+                                        break
+                            else:
+                                print(f"Editing {edit_question} is not supported.")
+                                j = 0
                         else:
-                            print("Edit sucessfull")
-                            
-                    else: 
-                        print(f"Editing {edit_question} is not supported.")
-                else:
-                    print(f"Invalid index: {edit_line}")
-            else:
-                print(f"Invalid index: {edit_line}")
-                    
-                    
-        """
-             
-                
-            if int(edit_line) in self.cart[edit_line]:
-                
-                    if edit_question == "amount":
-                        self.cart[edit_line][1]
-                        break
-                
+                            print(f"You can not edit line {edit_line}. Try Again!")
+                            j = 0
+                else: 
+                    print("Item not found, please try again")
             elif end_question == "no":
                 break
-            
-            else: 
-                continue
-        for i in self.cart[i]: 
-            if self.cart[edit_line][1] == 0:
-                del self.cart[edit_line]
-                print(f"Row number {edit_line} has now been taken of the recipiet")
-                
-        """
-
 
     def write_out_recipiet(self):
         """
@@ -142,10 +129,6 @@ class Database:
             writer = csv.writer(file)
             writer.writerow(["Total: "+ "      "+ "    " + "    " + str(price_sum)])
             
-        
-            
-#Använd remove, för att fixa så att vi kan ta bort spefecika produkter från den totala listan. 
-#Använd en funktion som kollar och ändrar en listposition så att man kan ändra antalet i listan. 
             
 def menu():
     print("-------------------------------")
@@ -166,7 +149,7 @@ def main():
         if option == "C":
             database.read_goods()
             cashier.cashier_mode()
-            cashier.edit_recipiet()
+            cashier.edit_receipt()
             cashier.write_out_recipiet()
             break
         elif option == "Q":
