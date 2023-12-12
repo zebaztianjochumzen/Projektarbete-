@@ -14,7 +14,7 @@ class Good:
     def __str__(self):
         return "Product: " + str(self.name) + "\n" "Code: " + str(self.code) + "\n" "Price: " + str(self.price) + "\n" "Amount: " + str(self.amount)
 
-class Database:
+class Cashier:
     """This class defines the database, it stores all the goods and contains the function cashier mode"""
 
     def __init__(self):
@@ -49,7 +49,6 @@ class Database:
         print("Just write out the product codes you want to add and the quantity")
         print("To exit and get a receipt finish with (#)")
         self.cart = []
-        #self.price = []
         
         while True:
             user_input = (input().split(" "))
@@ -73,14 +72,17 @@ class Database:
                     continue
             else:
                 print("Invalid Input")
-        print(self.cart)
+        
+        for item in self.cart:
+            print(f"{item}\n")
+
     
     def edit_receipt(self):
         """This function enables the user to change the amount before the receipt prints out, this also enables the user to delete unasked products"""
         while True:
             end_question = input("Do you want to edit the cart? ").lower() 
             if end_question == "yes":
-                edit_line = er.get_valid_input("Which line do you want to edit? ")
+                edit_line = (er.get_valid_input("Which line do you want to edit? ") -1)
                 if 0 <= edit_line < len(self.cart):
                     i, j = 0, 0
                     while j == 0:
@@ -111,11 +113,11 @@ class Database:
                     print("Item not found, please try again")
             elif end_question == "no":
                 break
+        print("Printing receipt.....")
 
-    def write_out_recipiet(self):
-        """
-        This function writes out the recipiet to the file named receipt.txt
-        """
+    def write_out_receipt(self):
+        """This function writes out the receipt to the file named receipt.csv"""
+        
         with open("receipt.csv", "w", newline="",encoding="utf-8") as file:
             fields = ("Products","Amount","A-Price","Price")
             writer = csv.writer(file)
@@ -131,6 +133,7 @@ class Database:
             
             
 def menu():
+    """This function creates the menu which gives the user the opportunity to choose what they want to do"""
     print("-------------------------------")
     print("C Cashier mode")
     print("Q Quit")
@@ -138,9 +141,10 @@ def menu():
     return option 
 
 def main():
+    """This is the main function which controlls all the other functions"""
     print("Welcome")
     print("---------------------------------")
-    database = Database()
+    database = Cashier()
     database.read_goods()
     cashier = database
     option = menu()
@@ -150,7 +154,7 @@ def main():
             database.read_goods()
             cashier.cashier_mode()
             cashier.edit_receipt()
-            cashier.write_out_recipiet()
+            cashier.write_out_receipt()
             break
         elif option == "Q":
             print("Bye!")
