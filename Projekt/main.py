@@ -20,7 +20,7 @@ class Cashier:
     def __init__(self):
         """This creates the different lists and dictionaries to enable the cashier function to have its funtionality"""
         self.goods = []
-        self.products = {} #Detta är en dictionary som lagrar key: Code och value: Name 
+        self.products = {}
         self.products_price = {}
         self.products_amount = {}
     
@@ -34,7 +34,7 @@ class Cashier:
             amount = int(file.readline().strip())
             new_goods = Good(code,name,price,amount)
             self.goods.append(new_goods)
-            self.products.update({code : name}) # Denna biten är ny och lägger till attributen code och name. Code = key och Name = Value
+            self.products.update({code : name}) 
             self.products_price.update({code : price})
             self.products_amount.update({code : amount})
             code = file.readline().strip()
@@ -42,7 +42,7 @@ class Cashier:
 
     
     def cashier_mode(self):
-        """ This function is the main part of the program, its the user friendly part where you cant actually write in the products you want to add.
+        """ This function is the main part of the program, its the user friendly part where you can actually write in the products you want to add.
             It also contains error handeling, so you can not write in odd inputs.
         """
         print("You have now entered the cashier mode:")
@@ -56,23 +56,28 @@ class Cashier:
                     break
             if all(element.isdigit() for element in user_input):
                 if user_input[0] in self.products:
-                    if len(user_input) <=1:
-                        print("Enter a valid amount")
-                        continue
-                    if int(user_input[1]) > self.products_amount[user_input[0]]:
-                            print("The amount you typed in does not exist")    
-                    
-                    elif user_input[0] in self.products_price:
-                        price = ((self.products_price[user_input[0]] * int(user_input[1])))
-                        self.cart.append([self.products[user_input[0]],user_input[1],self.products_price[user_input[0]],price])
-                        
-                        
+                        if len(user_input) <=1:
+                            print("Enter a valid amount")
+                            continue
+                        elif user_input[1] == '0':
+                                print("Enter a valid amount")
+                                continue
+                                
+                        elif int(user_input[1]) > self.products_amount[user_input[0]]:
+                            print("The amount you typed in exceeds the amount in the datbase")
+                            continue    
+                            
+                        if user_input[0] in self.products_price:
+                            price = ((self.products_price[user_input[0]] * int(user_input[1])))
+                            self.cart.append([self.products[user_input[0]],user_input[1],self.products_price[user_input[0]],price])
                 else:
                     print("That item does not exist")
                     continue
+
             else:
                 print("Invalid Input")
-        
+                
+        print("This is the items in the basket")
         for item in self.cart:
             print(f"{item}\n")
 
@@ -142,8 +147,8 @@ def menu():
 
 def main():
     """This is the main function which controlls all the other functions"""
-    print("Welcome")
-    print("---------------------------------")
+    print("\n","Welcome")
+    print("-------------------------------")
     database = Cashier()
     database.read_goods()
     cashier = database
