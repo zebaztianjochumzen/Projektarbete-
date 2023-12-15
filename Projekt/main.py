@@ -12,6 +12,7 @@ class Good:
         self.amount = amount
 
     def __str__(self):
+        """This function writes out the string representation of the object."""
         return "Product: " + str(self.name) + "\n" "Code: " + str(self.code) + "\n" "Price: " + str(self.price) + "\n" "Amount: " + str(self.amount)
 
 class Cashier:
